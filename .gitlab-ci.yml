@@ -1,0 +1,25 @@
+services:
+  - mysql:5.7
+variables:
+  MYSQL_DATABASE: 'ATTENDANCE'
+  MYSQL_USER: 'root'
+  MYSQL_PASSWORD: 'dilip'
+  MYSQL_ROOT_PASSWORD: 'dilip'
+
+
+stages:
+  - connect
+  - test
+
+connect:
+  image: mysql
+  script:
+  - echo "SELECT 'OK';" | mysql --user=root --password=$MYSQL_PASSWORD --host=mysql $MYSQL_DATABASE
+
+test:
+  stage: test
+  script:
+    - apt-get update -qy
+    - apt-get install -y python3 python3-pip
+    - pip3 install -r requirements.txt
+    - python3 manage.py test
